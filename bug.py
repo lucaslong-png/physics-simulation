@@ -12,4 +12,5 @@ class bug:
     calcEnergy():
         return 1 / 2 * m * spd ** 2
 
-tan_spd_slider = slider(bind = updateSpd, min = 0, max = 10)
+tan_spd_slider = slider(bind = update_spd, min = 0, max = 10)
+radial_distance_slider = slider(bind = update_radial_distance, min = 0, max = 1)
