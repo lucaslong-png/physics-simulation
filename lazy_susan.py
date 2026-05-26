@@ -1,17 +1,22 @@
 Web VPython 3.2
 import math
+f = 60 #fps
+dt = 1 / f
 class lazy_susan:
     __init__(self, rad, mass, ang_spd, direction):
         r = rad
         m = mass
-        w0 = ang_spd
+        w = ang_spd
         dir = direction
         I = 1/2 * mass * radius ** 2
-        disk = circle(pos = vec(0, 0), radius = r, np = 256)
+        disk = cylinder(pos = vec(0, 0, 0), axis = vec(0, 0, 1), radius = r, color = color.white, texture = textures.metal)
 
-
-
+    turn():
+        disk.color = vector(1, 0, 0)
+        disk.rotate(axis = vec(0, 0, 1), angle = w * dt)
 #assumed uniform mass distribution
+    recalcuate():
+
 
     calcAngularMomentum():
         return I * w0
@@ -37,4 +42,10 @@ class bug:
 
 
 setup():
+    rate(f)
+    dt = 1/f
+
+setSpeed(frequency):
+    rate(frequency)
+    f = frequency
     
