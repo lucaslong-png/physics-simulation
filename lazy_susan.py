@@ -22,10 +22,10 @@ class lazy_susan:
 
 
 class bug:
-    def _init_(self, mass, ang_vel, acceleration, distance, angle):
+    def _init_(self, mass, ang_vel, deceleration, distance, angle):
         m = mass
         avel = ang_vel
-        accel = acceleration
+        decel = deceleration
         dist = distance
         ang = angle #from positive x axis
         ladybug = cylinder(pos = vec(cos(angle), sin(angle), 0), axis = vec(0, 0, 1), radius = 0.01, color = color.red)
@@ -69,7 +69,7 @@ def update_radius1(k):
 radius1Slider = slider(bind = update_radius1, min = 0.1, max = 1, step = 0.01, value = 0.15)
 
 def update_deceleration(k):
-    b.accel = k
+    b.decel = k
 
 deceleration_slider = slider(bind = update_deceleration, min = 0.00, max = 1, step = 0.01, value = 0)
 
@@ -97,6 +97,6 @@ def setSpeed(frequency):
     dt = 1/f
 
 def tick():
-
-
-    
+    s.move()
+    b.move()
+    b.avel -= decel * dt
