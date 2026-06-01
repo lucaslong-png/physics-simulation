@@ -10,7 +10,7 @@ class lazy_susan:
         I = 1/2 * mass * rad ** 2
         disk = cylinder(pos = vec(0, 0, 0), axis = vec(0, 0, 1), radius = r, color = color.white, texture = textures.metal)
 
-    def turn(dt):
+    def turn(self, dt):
         disk.rotate(axis = vec(0, 0, 1), angle = w * dt)
 #assumed uniform mass distribution
 
@@ -39,7 +39,7 @@ class bug:
     def calcEnergy(self):
         return 1 / 2 * m * (ang_vel / distance) ** 2
 
-    def turn(self):
+    def turn(self, dt):
         ladybug.rotate(axis = vec(0, 0, 1), angle = avel * dt)
 
     def updateCylinder(self):
@@ -52,6 +52,13 @@ b = bug(1, 1, 0, 0, 0)
 def update_mass1(k):
     s.m = k
     s.updateCylinder()
+
+def start_simulation():
+    setup()
+    running = True
+
+startButton = button(bind = start_simulation, text = 'start simulation', pos = scene.title_anchor)
+
 
 
 mass1Slider = slider(bind = update_mass1, min = 0.01, max = 1, step = 0.01, value = 0.66)
@@ -133,11 +140,12 @@ def setSpeed(frequency):
     dt = 1/f
 
 def tick():
-    s.turn()
-    b.turn()
+    s.turn(dt)
+    b.turn(dt)
     b.avel -= decel * dt
 
 
-while True:
-    if (running):
-        tick()
+#while True:
+ #   rate(f)
+  #  if (running):
+   #     tick()
