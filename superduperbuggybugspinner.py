@@ -7,7 +7,6 @@ class lazy_susan:
         self.r = rad
         self.m = mass
         self.w = ang_vel
-        self.I = 1/2 * mass * rad ** 2
         self.disk = cylinder(pos = vec(0, 0, 0), axis = vec(0, 0, 1), radius = self.r, color = color.white, texture = textures.metal)
 
     def turn(self):
@@ -15,6 +14,8 @@ class lazy_susan:
         self.disk.rotate(axis = vec(0, 0, 1), angle = self.w * dt)
 #assumed uniform mass distribution
 
+    def calcInertia(self):
+        return 1/2 * self.mass * self.rad ** 2
 
     def calcAngularMomentum(self):
         return self.I * self.w
@@ -23,7 +24,6 @@ class lazy_susan:
         return 1 / 2 * self.I * self.w ** 2
 
     def updateCylinder(self):
-        global dt
         self.disk.radius = self.r
 
 class bug:
@@ -35,8 +35,12 @@ class bug:
         self.ang = angle #from positive x axis
         self.ladybug = cylinder(pos = self.dist * vec(cos(angle), sin(angle), 0), axis = vec(0, 0, 1), radius = 0.1, color = color.red)
 
+
+    def calcInertia(self):
+        return self.m * self.dist ** 2
+
     def calcAngularMomentum(self):
-        return self.m * self.dist ** 2 * self.avel
+        return self.calcInertia() * self.avel
 
     def calcEnergy(self):
         return 1 / 2 * self.m * (self.avel * self.dist) ** 2
