@@ -43,12 +43,13 @@ class bug:
 
     def turn(self, disk):
         global dt
-        self.ladybug.rotate(axis = vec(0, 0, 1), angle = disk.w * dt + self.avel * dt )
         self.ang += disk.w * dt + self.avel * dt
         while (self.ang > 2 * pi):
             self.ang -= 2 * pi
         while (self.ang < 0):
             self.ang += 2 * pi
+        self.ladybug.pos = self.dist * vec(cos(self.ang), sin(self.ang), 0)
+
 
 
     def updateCylinder(self):
@@ -57,13 +58,8 @@ class bug:
 
 s = lazy_susan(1, 5, 1)
 b = bug(1, 1, 0, 0, 0)
-
-def start_simulation():
-    setup()
-    global running
-    running = True
-
-startButton = button(bind = start_simulation, text = 'start simulation', pos = scene.title_anchor)
+sfinal #used later
+bfinal #used later
 
 def update_mass1(k):
     s.m = k.value
@@ -135,12 +131,20 @@ initial_angle_slider = slider(bind = update_initial_angle, min = 0, max = 2 * pi
 scene.append_to_caption('bug initial angle (radians) \n')
 
 
+def start_simulation():
+    setup()
+
+
+startButton = button(bind = start_simulation, text = 'start simulation', pos = scene.title_anchor)
 
 def setup():
-    global dt
-    global f
+    global dt, f, running, sfinal, bfinal
     rate(f)
     dt = 1/f
+    running = True
+    sfinal = s
+    bfinal = b
+
 
 def setSpeed(frequency):
     global dt
@@ -150,9 +154,10 @@ def setSpeed(frequency):
     dt = 1/f
 
 def tick():
-    s.turn()
-    b.turn(s)
-    b.avel -= b.decel * dt
+    global dt
+    sfinal.turn()
+    bfinal.turn(sfinal)
+    bfinal.avel -= bfinal.decel * dt
 
 
 while True:
