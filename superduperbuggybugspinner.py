@@ -1,7 +1,7 @@
 Web VPython 3.2
 f = 60 #fps
 dt = 1 / f
-running = True #boolean
+running = False #boolean
 class lazy_susan:
     def __init__(self, rad, mass, ang_vel):
         self.r = rad
@@ -24,8 +24,7 @@ class lazy_susan:
 
     def updateCylinder(self):
         global dt
-        self.disk.visible = False
-        self.disk = cylinder(pos = vec(0, 0, 0), axis = vec(0, 0, 1), radius = self.r, color = color.white, texture = textures.metal)
+        self.disk.radius = self.r
 
 class bug:
     def __init__(self, mass, ang_vel, deceleration, distance, angle):
@@ -42,17 +41,18 @@ class bug:
     def calcEnergy(self):
         return 1 / 2 * self.m * (self.avel * self.dist) ** 2
 
-    def turn(self):
+    def turn(self, disk):
         global dt
-        self.ladybug.rotate(axis = vec(0, 0, 1), angle = self.avel * dt)
-        self.ang += self.avel * dt
-        if (self.ang > 2 * pi):
+        self.ladybug.rotate(axis = vec(0, 0, 1), angle = disk.w * dt + self.avel * dt )
+        self.ang += disk.w * dt + self.avel * dt
+        while (self.ang > 2 * pi):
             self.ang -= 2 * pi
+        while (self.ang < 0):
+            self.ang += 2 * pi
 
 
     def updateCylinder(self):
-        self.ladybug.visible = False
-        self.ladybug = cylinder(pos = self.dist * vec(cos(self.ang), sin(self.ang), 0), axis = vec(0, 0, 1), radius = 0.1, color = color.red)
+        self.ladybug.pos = self.dist * vec(cos(self.ang), sin(self.ang))
 
 
 s = lazy_susan(1, 5, 1)
@@ -114,7 +114,7 @@ def update_deceleration(k):
 
 
 deceleration_slider = slider(bind = update_deceleration, min = 0.00, max = 1, step = 0.01, value = 0)
-scene.append_to_caption('disk deceleration (rad/s^2) \n')
+scene.append_to_caption('bug deceleration (rad/s^2) \n')
 
 
 def update_radial_distance(k):
@@ -136,9 +136,6 @@ scene.append_to_caption('bug initial angle (radians) \n')
 
 
 
-
-
-
 def setup():
     global dt
     global f
@@ -154,11 +151,11 @@ def setSpeed(frequency):
 
 def tick():
     s.turn()
-    b.turn()
+    b.turn(s)
     b.avel -= b.decel * dt
 
 
-#while True:
- #   rate(f)
-  #  if (running):
-   #     tick()
+while True:
+    rate(f)
+    if (running):
+        tick()
