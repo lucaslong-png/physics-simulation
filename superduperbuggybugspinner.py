@@ -2,6 +2,7 @@ Web VPython 3.2
 f = 60 #fps
 dt = 1 / f
 running = False #boolean
+totalAngularMomentum = 0
 class lazy_susan:
     def __init__(self, rad, mass, ang_vel):
         self.r = rad
@@ -15,13 +16,13 @@ class lazy_susan:
 #assumed uniform mass distribution
 
     def calcInertia(self):
-        return 1/2 * self.mass * self.rad ** 2
+        return 0.5 * self.m * self.r ** 2
 
     def calcAngularMomentum(self):
-        return self.I * self.w
+        return self.calcInertia() * self.w
 
     def calcEnergy(self):
-        return 1 / 2 * self.I * self.w ** 2
+        return 0.5 * self.calcInertia() * self.w ** 2
 
     def updateCylinder(self):
         self.disk.radius = self.r
@@ -43,7 +44,7 @@ class bug:
         return self.calcInertia() * self.avel
 
     def calcEnergy(self):
-        return 1 / 2 * self.m * (self.avel * self.dist) ** 2
+        return 0.5 * self.m * (self.avel * self.dist) ** 2
 
     def turn(self, disk):
         global dt
@@ -57,13 +58,13 @@ class bug:
 
 
     def updateCylinder(self):
-        self.ladybug.pos = self.dist * vec(cos(self.ang), sin(self.ang))
+        self.ladybug.pos = self.dist * vec(cos(self.ang), sin(self.ang), 0)
 
 
 s = lazy_susan(1, 5, 1)
 b = bug(1, 1, 0, 0, 0)
-sfinal #used later
-bfinal #used later
+sfinal = None#used later
+bfinal = None #used later
 
 def update_mass1(k):
     s.m = k.value
@@ -141,13 +142,18 @@ def start_simulation():
 
 startButton = button(bind = start_simulation, text = 'start simulation', pos = scene.title_anchor)
 
+#finalAngVel = wtext(text = ...)
+
+
+
 def setup():
-    global dt, f, running, sfinal, bfinal
+    global dt, f, running, sfinal, bfinal, totalAngularMomentum
     rate(f)
     dt = 1/f
     running = True
-    sfinal = s
-    bfinal = b
+    sfinal = lazy_susan(s.r, s.m, s.w)
+    bfinal = bug(b.m, b.avel, b.decel, b.dist, b.ang)
+    totalAngularMomentum = sfinal.calcAngularMomentum() + bfinal.calcAngularMomentum()
 
 
 def setSpeed(frequency):
@@ -162,9 +168,14 @@ def tick():
     sfinal.turn()
     bfinal.turn(sfinal)
     bfinal.avel -= bfinal.decel * dt
+    diskAngularMomentum = totalAngularMomentum - bfinal.calcAngularMomentum()
+    sfinal.w = diskAngularMomentum / sfinal.calcInertia()
+
 
 
 while True:
     rate(f)
     if (running):
         tick()
+    if (bfinal.avel <= 0):
+        running = False
