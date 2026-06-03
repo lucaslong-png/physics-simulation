@@ -3,6 +3,8 @@ f = 60 #fps
 dt = 1 / f
 running = False #boolean
 totalAngularMomentum = 0
+ccwBug = False
+
 class lazy_susan:
     def __init__(self, rad, mass, ang_vel):
         self.r = rad
@@ -34,7 +36,7 @@ class bug:
         self.decel = deceleration
         self.dist = distance
         self.ang = angle #from positive x axis
-        self.ladybug = cylinder(pos = self.dist * vec(cos(angle), sin(angle), 0), axis = vec(0, 0, 1), radius = 0.1, color = color.red)
+        self.ladybug = cylinder(pos = vec(self.dist * cos(angle), self.dist * sin(angle), 1), axis = vec(0, 0, 1), radius = 0.05, length = 0.01, color = color.red)
 
 
     def calcInertia(self):
@@ -53,18 +55,17 @@ class bug:
             self.ang -= 2 * pi
         while (self.ang < 0):
             self.ang += 2 * pi
-        self.ladybug.pos = self.dist * vec(cos(self.ang), sin(self.ang), 0)
+        self.ladybug.pos = vec(self.dist * cos(self.ang), self.dist * sin(self.ang), 1)
 
 
 
     def updateCylinder(self):
-        self.ladybug.pos = self.dist * vec(cos(self.ang), sin(self.ang), 0)
+        self.ladybug.pos = vec(self.dist * cos(self.ang), self.dist * sin(self.ang), 1)
 
 
 s = lazy_susan(1, 5, 1)
 b = bug(1, 1, 0, 0, 0)
-sfinal = None#used later
-bfinal = None #used later
+
 
 def update_mass1(k):
     s.m = k.value
@@ -142,17 +143,50 @@ def start_simulation():
 
 startButton = button(bind = start_simulation, text = 'start simulation', pos = scene.title_anchor)
 
+def reset():
+    running = False
+    s.disk.visible = False
+    b.ladybug.visible = False
+    s = lazy_susan(1, 5, 1)
+    b = bug(1, 1, 0, 0, 0)
+    enableWidgets()
+
+resetButton = button(bind = reset, text = 'reset', pos = scene.title_anchor)
+
 #finalAngVel = wtext(text = ...)
+def disableWidgets():
+    mass1Slider.disabled = True
+    mass2Slider.disabled = True
+    angVel1Slider.disabled = True
+    angVel2Slider.disabled = True
+    radius1Slider.disabled = True
+    deceleration_slider.disabled = True
+    radial_distance_slider.disabled = True
+    initial_angle_slider.disabled = True
+    startButton.disabled = True
+
+def enableWidgets():
+    mass1Slider.disabled = False
+    mass2Slider.disabled = False
+    angVel1Slider.disabled = False
+    angVel2Slider.disabled = False
+    radius1Slider.disabled = False
+    deceleration_slider.disabled = False
+    radial_distance_slider.disabled = False
+    initial_angle_slider.disabled = False
+    startButton.disabled = False
+
 
 
 
 def setup():
-    global dt, f, running, sfinal, bfinal, totalAngularMomentum
+    global dt, f, running, s, b, totalAngularMomentum, ccwBug
     rate(f)
     dt = 1/f
     running = True
-    sfinal = lazy_susan(s.r, s.m, s.w)
-    bfinal = bug(b.m, b.avel, b.decel, b.dist, b.ang)
+    disableWidgets()
+    if (b.avel < 0):
+        ccwBug = True
     totalAngularMomentum = sfinal.calcAngularMomentum() + bfinal.calcAngularMomentum()
 
 
@@ -164,12 +198,19 @@ def setSpeed(frequency):
     dt = 1/f
 
 def tick():
-    global dt
-    sfinal.turn()
-    bfinal.turn(sfinal)
-    bfinal.avel -= bfinal.decel * dt
-    diskAngularMomentum = totalAngularMomentum - bfinal.calcAngularMomentum()
-    sfinal.w = diskAngularMomentum / sfinal.calcInertia()
+    global dt, sfinal, bfinal
+    s.turn()
+    b.turn(s)
+    if (ccwBug):
+        b.avel += b.decel * dt
+    else:
+        b.avel -= b.decel * dt
+    diskAngularMomentum = totalAngularMomentum - b.calcAngularMomentum()
+    s.w = diskAngularMomentum / s.calcInertia()
+
+def beforeSimStartsTick():
+    s.turn()
+    b.turn(s)
 
 
 
@@ -177,5 +218,7 @@ while True:
     rate(f)
     if (running):
         tick()
-    if (bfinal.avel <= 0):
-        running = False
+        if ((ccwBug and b.avel >= 0) or ((not ccwBug) and b.avel <= 0)):
+            running = False
+    else:
+      #  beforeSimStartsTick()
