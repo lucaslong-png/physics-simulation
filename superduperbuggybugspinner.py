@@ -73,7 +73,7 @@ def update_mass1(k):
 
 
 mass1Slider = slider(bind = update_mass1, min = 0.01, max = 1, step = 0.01, value = 0.66)
-scene.append_to_caption('mass of disk (kg) \n')
+scene.append_to_caption('mass of disk (kg) \n') #needs labels
 
 def update_mass2(k):
     b.m = k.value
@@ -153,7 +153,7 @@ def reset():
 
 resetButton = button(bind = reset, text = 'reset', pos = scene.title_anchor)
 
-#finalAngVel = wtext(text = ...)
+finalAngVel = wtext(text = 'disk angular velocity: ' + s.w) #needs fixing
 def disableWidgets():
     mass1Slider.disabled = True
     mass2Slider.disabled = True
@@ -198,7 +198,7 @@ def setSpeed(frequency):
     dt = 1/f
 
 def tick():
-    global dt, sfinal, bfinal
+    global dt, sfinal, bfinal, ccwBug
     s.turn()
     b.turn(s)
     if (ccwBug):
