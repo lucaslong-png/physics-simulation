@@ -124,7 +124,7 @@ def update_radial_distance(k):
     b.updateCylinder()
 
 
-radial_distance_slider = slider(bind = update_radial_distance, min = 0.01, max = 1, step = 0.01, value = s.r)
+radial_distance_slider = slider(bind = update_radial_distance, min = 0.01, max = s.r, step = 0.01, value = s.r)
 scene.append_to_caption('bug radial distance (m) \n')
 
 
@@ -144,6 +144,7 @@ def start_simulation():
 startButton = button(bind = start_simulation, text = 'start simulation', pos = scene.title_anchor)
 
 def reset():
+    global running, s, b
     running = False
     s.disk.visible = False
     b.ladybug.visible = False
@@ -187,7 +188,7 @@ def setup():
     disableWidgets()
     if (b.avel < 0):
         ccwBug = True
-    totalAngularMomentum = sfinal.calcAngularMomentum() + bfinal.calcAngularMomentum()
+    totalAngularMomentum = s.calcAngularMomentum() + b.calcAngularMomentum()
 
 
 def setSpeed(frequency):
@@ -198,7 +199,7 @@ def setSpeed(frequency):
     dt = 1/f
 
 def tick():
-    global dt, sfinal, bfinal, ccwBug
+    global dt, s, b, ccwBug
     s.turn()
     b.turn(s)
     if (ccwBug):
