@@ -64,68 +64,105 @@ class bug:
 
 
 s = lazy_susan(1, 5, 1)
-b = bug(1, 1, 0, 0, 0)
+b = bug(1, 1, 0, 1, 0)
 
+directionLabel = label(pos = vector(0, 1.3, 0), text = 'Note: positive angular velocity values are considered to be in the counterclockwise direction', color = vec(255, 0, 0))
+#need to fix
 
 def update_mass1(k):
     s.m = k.value
     s.updateCylinder()
+    mass1.text = mass1Slider.value
 
 
 mass1Slider = slider(bind = update_mass1, min = 0.01, max = 1, step = 0.01, value = 0.66)
-scene.append_to_caption('mass of disk (kg) \n') #needs labels
+scene.append_to_caption('mass of disk: ')
+mass1 = wtext(text = mass1Slider.value)
+scene.append_to_caption('kg \n')
+
 
 def update_mass2(k):
     b.m = k.value
     b.updateCylinder()
+    mass2.text = mass2Slider.value
+
 
 
 mass2Slider = slider(bind = update_mass2, min = 0.01, max = 0.3, step = 0.01, value = 0.17)
-scene.append_to_caption('mass of bug (kg) \n')
+scene.append_to_caption('mass of bug: ')
+mass2 = wtext(text = mass2Slider.value)
+scene.append_to_caption('kg \n')
+
+
 
 
 def update_disk_initial_angular_velocity(k):
     s.w = k.value
     s.updateCylinder()
+    angVel1.text = angVel1Slider.value
+
 
 angVel1Slider = slider(bind = update_disk_initial_angular_velocity, min = -15, max = 15, step = 0.1, value = 2.8)
-scene.append_to_caption('disk initial angular velocity (rad/s) \n')
+scene.append_to_caption('disk initial angular velocity: ')
+angVel1 = wtext(text = angVel1Slider.value)
+scene.append_to_caption('rad/s \n')
+
 
 
 def update_bug_initial_angular_velocity(k):
     b.avel = k.value
     b.updateCylinder()
+    angVel2.text = angVel2Slider.value
 
 
 angVel2Slider = slider(bind = update_bug_initial_angular_velocity, min = -15, max = 15, step = 0.1, value = 13.3)
-scene.append_to_caption('bug initial angular velocity (rad/s) \n')
+scene.append_to_caption('bug initial angular velocity: ')
+angVel2 = wtext(text = angVel2Slider.value)
+scene.append_to_caption('rad/s \n')
+
+
 
 
 def update_radius1(k):
     s.r = k.value
     s.updateCylinder()
+    radius1.text = radius1Slider.value
+
 
 
 radius1Slider = slider(bind = update_radius1, min = 0.1, max = 1, step = 0.01, value = 0.15)
-scene.append_to_caption('disk radius (m) \n')
+scene.append_to_caption('disk radius: ')
+radius1 = wtext(text = radius1Slider.value)
+scene.append_to_caption('m \n')
+
 
 
 def update_deceleration(k):
     b.decel = k.value
     b.updateCylinder()
+    deceleration_val.text = deceleration_slider.value
 
 
 deceleration_slider = slider(bind = update_deceleration, min = 0.00, max = 1, step = 0.01, value = 0)
-scene.append_to_caption('bug deceleration (rad/s^2) \n')
+scene.append_to_caption('bug deceleration: ')
+deceleration_val = wtext(text = deceleration_slider.value)
+scene.append_to_caption('rad/s² \n')
+
 
 
 def update_radial_distance(k):
     b.dist = k.value
     b.updateCylinder()
+    radial_distance.text = radial_distance_slider.value
 
 
-radial_distance_slider = slider(bind = update_radial_distance, min = 0.01, max = s.r, step = 0.01, value = s.r)
-scene.append_to_caption('bug radial distance (m) \n')
+radial_distance_slider = slider(bind = update_radial_distance, min = 0.01, max = s.r, step = 0.01, value = 1)
+scene.append_to_caption('bug radial distance: ')
+radial_distance = wtext(text = radial_distance_slider.value)
+scene.append_to_caption('m \n')
+
+
+
 
 
 def update_initial_angle(k):
@@ -191,6 +228,9 @@ def setup():
         ccwBug = True
     totalAngularMomentum = s.calcAngularMomentum() + b.calcAngularMomentum(s)
 
+#def calcTotalEnergy():
+ ##  return s.calcEnergy() + b.cal
+
 
 def setSpeed(frequency):
     global dt
@@ -210,7 +250,7 @@ def tick():
         b.avel -= b.decel * dt
     diskAngularMomentum = totalAngularMomentum - b.calcAngularMomentum(s)
     s.w = diskAngularMomentum / s.calcInertia()
-    finalAngVel.text = 'disk angular velocity: ' + s.w
+    finalAngVel.text = 'disk angular velocity: ' + s.w + 'rad/s'
 
 
 def beforeSimStartsTick():
