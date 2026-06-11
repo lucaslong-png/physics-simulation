@@ -78,7 +78,7 @@ def update_mass1(k):
 mass1Slider = slider(bind = update_mass1, min = 0.01, max = 1, step = 0.01, value = 0.66)
 scene.append_to_caption('mass of disk: ')
 mass1 = wtext(text = mass1Slider.value)
-scene.append_to_caption('kg \n')
+scene.append_to_caption(' kg \n')
 
 
 def update_mass2(k):
@@ -91,7 +91,7 @@ def update_mass2(k):
 mass2Slider = slider(bind = update_mass2, min = 0.01, max = 0.3, step = 0.01, value = 0.17)
 scene.append_to_caption('mass of bug: ')
 mass2 = wtext(text = mass2Slider.value)
-scene.append_to_caption('kg \n')
+scene.append_to_caption(' kg \n')
 
 
 
@@ -105,7 +105,7 @@ def update_disk_initial_angular_velocity(k):
 angVel1Slider = slider(bind = update_disk_initial_angular_velocity, min = -15, max = 15, step = 0.1, value = 2.8)
 scene.append_to_caption('disk initial angular velocity: ')
 angVel1 = wtext(text = angVel1Slider.value)
-scene.append_to_caption('rad/s \n')
+scene.append_to_caption(' rad/s \n')
 
 
 
@@ -118,7 +118,7 @@ def update_bug_initial_angular_velocity(k):
 angVel2Slider = slider(bind = update_bug_initial_angular_velocity, min = -15, max = 15, step = 0.1, value = 13.3)
 scene.append_to_caption('bug initial angular velocity: ')
 angVel2 = wtext(text = angVel2Slider.value)
-scene.append_to_caption('rad/s \n')
+scene.append_to_caption(' rad/s \n')
 
 
 
@@ -137,7 +137,7 @@ def update_radius1(k):
 radius1Slider = slider(bind = update_radius1, min = 0.1, max = 1, step = 0.01, value = 0.15)
 scene.append_to_caption('disk radius: ')
 radius1 = wtext(text = radius1Slider.value)
-scene.append_to_caption('m \n')
+scene.append_to_caption(' m \n')
 
 
 
@@ -150,7 +150,7 @@ def update_deceleration(k):
 deceleration_slider = slider(bind = update_deceleration, min = 0.00, max = 1, step = 0.01, value = 0)
 scene.append_to_caption('bug deceleration: ')
 deceleration_val = wtext(text = deceleration_slider.value)
-scene.append_to_caption('rad/s² \n')
+scene.append_to_caption(' rad/s² \n')
 
 
 
@@ -163,7 +163,7 @@ def update_radial_distance(k):
 radial_distance_slider = slider(bind = update_radial_distance, min = 1, max = 100, step = 1, value = 100)
 scene.append_to_caption('bug radial distance: ')
 radial_distance = wtext(text = s.r)
-scene.append_to_caption('m \n')
+scene.append_to_caption(' m \n')
 
 
 
@@ -176,9 +176,9 @@ def update_initial_angle(k):
 
 
 initial_angle_slider = slider(bind = update_initial_angle, min = 0, max = 2 * pi, value = s.r)
-scene.append_to_caption('bug initial angle (radians) \n')
+scene.append_to_caption('bug initial angle: ')
 initial_angle_val = wtext(text = initial_angle_slider.value)
-scene.append_to_caption('radians')
+scene.append_to_caption(' radians \n')
 
 def start_simulation():
     setup()
