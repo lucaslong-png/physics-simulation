@@ -36,7 +36,7 @@ class bug:
         self.decel = deceleration
         self.dist = distance
         self.ang = angle #from positive x axis
-        self.ladybug = cylinder(pos = vec(self.dist * cos(angle), self.dist * sin(angle), 1), axis = vec(0, 0, 1), radius = 0.05, length = 0.01, color = color.red)
+        self.ladybug = cylinder(pos = vec(self.dist * cos(angle), self.dist * sin(angle), 1), axis = vec(0, 0, 1), radius = 0.01, length = 0.001, color = color.red)
 
 
     def calcInertia(self):
@@ -63,10 +63,10 @@ class bug:
         self.ladybug.pos = vec(self.dist * cos(self.ang), self.dist * sin(self.ang), 1)
 
 
-s = lazy_susan(1, 5, 1)
-b = bug(1, 1, 0, 1, 0)
+s = lazy_susan(0.15, 0.66, 2.8)
+b = bug(0.17, 13.3, 0, 0.15, 0)
 
-directionLabel = label(pos = vector(0, 1.3, 0), text = 'Note: positive angular velocity values are considered to be in the counterclockwise direction', color = vec(255, 0, 0))
+directionLabel = label(pos = vector(0, 1.8, 0), text = 'Note: positive angular velocity values are considered to be in the counterclockwise direction', color = vec(255, 0, 0))
 #need to fix
 
 def update_mass1(k):
@@ -151,12 +151,12 @@ scene.append_to_caption('rad/s² \n')
 
 
 def update_radial_distance(k):
-    b.dist = k.value
+    b.dist = k.value / 100 * s.r
     b.updateCylinder()
-    radial_distance.text = radial_distance_slider.value
+    radial_distance.text = b.dist
 
 
-radial_distance_slider = slider(bind = update_radial_distance, min = 0.01, max = s.r, step = 0.01, value = 1)
+radial_distance_slider = slider(bind = update_radial_distance, min = 1, max = 100, step = 1, value = 100)
 scene.append_to_caption('bug radial distance: ')
 radial_distance = wtext(text = radial_distance_slider.value)
 scene.append_to_caption('m \n')
@@ -185,8 +185,8 @@ def reset():
     running = False
     s.disk.visible = False
     b.ladybug.visible = False
-    s = lazy_susan(1, 5, 1)
-    b = bug(1, 1, 0, 0, 0)
+    s = lazy_susan(radius1Slider.value, mass1Slider.value, angVel1Slider.value)
+    b = bug(mass2Slider.value, angVel2Slider.value, deceleration_slider.value, radial_distance_slider.value, initial_angle_slider.value)
     enableWidgets()
 
 resetButton = button(bind = reset, text = 'reset', pos = scene.title_anchor)
