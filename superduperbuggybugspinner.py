@@ -197,8 +197,8 @@ def reset():
 
 resetButton = button(bind = reset, text = 'reset', pos = scene.title_anchor)
 
-finalAngVel = wtext(text = 'disk angular velocity: ' + s.w)
-scene.append_to_caption('/n')
+finalAngVel = wtext(text = 'disk angular velocity: ' + 0 + 'rad/s')
+scene.append_to_caption('\n')
 finalAngMomentum = wtext(text = 'total angular momentum: ' + totalAngularMomentum + 'kg m²/s')
 
 def disableWidgets():
