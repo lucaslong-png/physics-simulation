@@ -46,7 +46,7 @@ class bug:
         return self.calcInertia() * (self.avel + disk.w)
 
     def calcEnergy(self):
-        return 0.5 * self.m * (self.avel * self.dist) ** 2
+        return 0.5 * self.calcInertia() * (self.avel + disk.w) ** 2
 
     def turn(self, disk):
         global dt
@@ -192,6 +192,8 @@ def reset():
 resetButton = button(bind = reset, text = 'reset', pos = scene.title_anchor)
 
 finalAngVel = wtext(text = 'disk angular velocity: ' + s.w)
+scene.append_to_caption('/n')
+finalAngMomentum = wtext(text = 'total angular momentum: ' + totalAngularMomentum + 'kg m²/s')
 
 def disableWidgets():
     mass1Slider.disabled = True
@@ -243,14 +245,15 @@ def tick():
     global dt, s, b, ccwBug, finalAngVel, totalAngularMomentum
     s.turn()
     b.turn(s)
-    totalAngularMomentum = s.calcAngularMomentum() + b.calcAngularMomentum(s)
     if (ccwBug):
         b.avel += b.decel * dt
+        s.w -= ((b.decel * b.calcInertia()) / (s.calcInertia() + b.calcInertia())) * dt
     else:
         b.avel -= b.decel * dt
-    diskAngularMomentum = totalAngularMomentum - b.calcAngularMomentum(s)
-    s.w = diskAngularMomentum / s.calcInertia()
+        s.w += ((b.decel * b.calcInertia()) / (s.calcInertia() + b.calcInertia())) * dt
+    totalAngularMomentum = b.calcAngularMomentum(s) + s.calcAngularMomentum()
     finalAngVel.text = 'disk angular velocity: ' + s.w + 'rad/s'
+    finalAngMomentum.text = 'angular momentum: ' + totalAngularMomentum + 'kg m²/s'
 
 
 def beforeSimStartsTick():
