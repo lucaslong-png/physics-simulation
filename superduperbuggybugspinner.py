@@ -127,6 +127,10 @@ def update_radius1(k):
     s.r = k.value
     s.updateCylinder()
     radius1.text = radius1Slider.value
+    b.dist = radial_distance_slider.value / 100 * s.r
+    b.updateCylinder()
+    radial_distance.text = b.dist
+
 
 
 
@@ -158,7 +162,7 @@ def update_radial_distance(k):
 
 radial_distance_slider = slider(bind = update_radial_distance, min = 1, max = 100, step = 1, value = 100)
 scene.append_to_caption('bug radial distance: ')
-radial_distance = wtext(text = radial_distance_slider.value)
+radial_distance = wtext(text = s.r)
 scene.append_to_caption('m \n')
 
 
@@ -168,11 +172,13 @@ scene.append_to_caption('m \n')
 def update_initial_angle(k):
     b.ang = k.value
     b.updateCylinder()
+    initial_angle_val.text = intial_angle_slider.value
 
 
 initial_angle_slider = slider(bind = update_initial_angle, min = 0, max = 2 * pi, value = s.r)
 scene.append_to_caption('bug initial angle (radians) \n')
-
+initial_angle_val = wtext(text = initial_angle_slider.value)
+scene.append_to_caption('radians')
 
 def start_simulation():
     setup()
@@ -186,7 +192,7 @@ def reset():
     s.disk.visible = False
     b.ladybug.visible = False
     s = lazy_susan(radius1Slider.value, mass1Slider.value, angVel1Slider.value)
-    b = bug(mass2Slider.value, angVel2Slider.value, deceleration_slider.value, radial_distance_slider.value, initial_angle_slider.value)
+    b = bug(mass2Slider.value, angVel2Slider.value, deceleration_slider.value, radial_distance_slider.value / 100 * radius1Slider.value, initial_angle_slider.value)
     enableWidgets()
 
 resetButton = button(bind = reset, text = 'reset', pos = scene.title_anchor)
