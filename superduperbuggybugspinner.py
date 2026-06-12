@@ -279,6 +279,6 @@ while True:
     rate(f)
     if (running):
         tick()
-        if ((ccwBug and b.avel >= 0) or ((not ccwBug) and b.avel <= 0)):
+        if ((ccwBug and b.avel + b.decel * dt >= 0) or ((not ccwBug) and b.avel - b.decel * dt <= 0)):
             postSimulation = True
             b.avel = 0
