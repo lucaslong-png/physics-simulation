@@ -104,7 +104,7 @@ def update_disk_initial_angular_velocity(k):
     angVel1.text = angVel1Slider.value
 
 
-angVel1Slider = slider(bind = update_disk_initial_angular_velocity, min = -15, max = 15, step = 0.1, value = 2.8)
+angVel1Slider = slider(bind = update_disk_initial_angular_velocity, min = -15, max = 15, step = 0.1, value = -2.8)
 scene.append_to_caption('disk initial angular velocity: ')
 angVel1 = wtext(text = angVel1Slider.value)
 scene.append_to_caption(' rad/s \n')
