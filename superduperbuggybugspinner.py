@@ -1,6 +1,7 @@
 Web VPython 3.2
 f = 60 #fps
 dt = 1 / f
+t = 0
 running = False #boolean
 totalAngularMomentum = 0
 ccwBug = False
@@ -45,7 +46,7 @@ class bug:
     def calcAngularMomentum(self, disk):
         return self.calcInertia() * (self.avel + disk.w)
 
-    def calcEnergy(self):
+    def calcEnergy(self, disk):
         return 0.5 * self.calcInertia() * (self.avel + disk.w) ** 2
 
     def turn(self, disk):
@@ -172,7 +173,7 @@ scene.append_to_caption(' m \n')
 def update_initial_angle(k):
     b.ang = k.value
     b.updateCylinder()
-    initial_angle_val.text = intial_angle_slider.value
+    initial_angle_val.text = initial_angle_slider.value
 
 
 initial_angle_slider = slider(bind = update_initial_angle, min = 0, max = 2 * pi, value = s.r)
@@ -186,9 +187,17 @@ def start_simulation():
 
 startButton = button(bind = start_simulation, text = 'start simulation', pos = scene.title_anchor)
 
+
+g = graph(title = 'Kinetic Energy vs. Time', xtitle = 'Time (s)', ytitle = 'Kinetic Energy (J)', ymin = 0)
+gc = gcurve(graph = g)
+
+
 def reset():
-    global running, s, b
+    global running, s, b, t, gc, ccwBug
     running = False
+    ccwBug = (b.avel < 0)
+    t = 0
+    gc.delete()
     s.disk.visible = False
     b.ladybug.visible = False
     s = lazy_susan(radius1Slider.value, mass1Slider.value, angVel1Slider.value)
@@ -246,9 +255,11 @@ def setSpeed(frequency):
     rate(frequency)
     f = frequency
     dt = 1/f
+    
+
 
 def tick():
-    global dt, s, b, ccwBug, finalAngVel, totalAngularMomentum
+    global dt, t, g, gc, s, b, ccwBug, finalAngVel, totalAngularMomentum
     s.turn()
     b.turn(s)
     if (ccwBug):
@@ -258,9 +269,10 @@ def tick():
         b.avel -= b.decel * dt
         s.w += ((b.decel * b.calcInertia()) / (s.calcInertia() + b.calcInertia())) * dt
     totalAngularMomentum = b.calcAngularMomentum(s) + s.calcAngularMomentum()
-    finalAngVel.text = 'disk angular velocity: ' + s.w + 'rad/s'
-    finalAngMomentum.text = 'angular momentum: ' + totalAngularMomentum + 'kg m²/s'
-
+    finalAngVel.text = 'disk angular velocity: ' + str(s.w) + 'rad/s'
+    finalAngMomentum.text = 'angular momentum: ' + str(totalAngularMomentum) + 'kg m²/s'
+    gc.plot(t, b.calcEnergy(s) + s.calcEnergy())
+    t += dt
 
 def beforeSimStartsTick():
     s.turn()
@@ -274,5 +286,6 @@ while True:
         tick()
         if ((ccwBug and b.avel >= 0) or ((not ccwBug) and b.avel <= 0)):
             running = False
+            b.avel = 0
     else:
-      #  beforeSimStartsTick()
+        #beforeSimStartsTick()
