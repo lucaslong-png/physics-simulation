@@ -65,7 +65,7 @@ class bug:
         self.ladybug.pos = vec(self.dist * cos(self.ang), self.dist * sin(self.ang), 1)
 
 
-s = lazy_susan(0.15, 0.66, -2.8)
+s = lazy_susan(0.15, 0.44, -2.8)
 b = bug(0.17, 16.1, 0, 0.15, 0)
 
 directionLabel = label(pos = vector(0, 1.8, 0), text = 'Note: positive angular velocity values are considered to be in the counterclockwise direction', color = vec(255, 0, 0))
@@ -77,7 +77,7 @@ def update_mass1(k):
     mass1.text = mass1Slider.value
 
 
-mass1Slider = slider(bind = update_mass1, min = 0.01, max = 1, step = 0.01, value = 0.66)
+mass1Slider = slider(bind = update_mass1, min = 0.01, max = 1, step = 0.01, value = 0.44)
 scene.append_to_caption('mass of disk: ')
 mass1 = wtext(text = mass1Slider.value)
 scene.append_to_caption(' kg \n')
@@ -194,7 +194,7 @@ gc = gcurve(graph = g)
 
 
 def reset():
-    global running, s, b, t, gc, ccwBug
+    global running, s, b, t, gc, ccwBug, postSimulation
     running = False
     postSimulation = False
     ccwBug = (b.avel < 0)
