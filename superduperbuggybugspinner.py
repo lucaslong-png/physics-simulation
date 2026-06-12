@@ -65,8 +65,8 @@ class bug:
         self.ladybug.pos = vec(self.dist * cos(self.ang), self.dist * sin(self.ang), 1)
 
 
-s = lazy_susan(0.15, 0.66, 2.8)
-b = bug(0.17, 13.3, 0, 0.15, 0)
+s = lazy_susan(0.15, 0.66, -2.8)
+b = bug(0.17, 16.1, 0, 0.15, 0)
 
 directionLabel = label(pos = vector(0, 1.8, 0), text = 'Note: positive angular velocity values are considered to be in the counterclockwise direction', color = vec(255, 0, 0))
 #need to fix
@@ -117,7 +117,7 @@ def update_bug_initial_angular_velocity(k):
     angVel2.text = angVel2Slider.value
 
 
-angVel2Slider = slider(bind = update_bug_initial_angular_velocity, min = -15, max = 15, step = 0.1, value = 13.3)
+angVel2Slider = slider(bind = update_bug_initial_angular_velocity, min = -20, max = 20, step = 0.1, value = 16.1)
 scene.append_to_caption('bug initial angular velocity: ')
 angVel2 = wtext(text = angVel2Slider.value)
 scene.append_to_caption(' rad/s \n')
