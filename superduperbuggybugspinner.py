@@ -189,7 +189,7 @@ def start_simulation():
 startButton = button(bind = start_simulation, text = 'start simulation', pos = scene.title_anchor)
 
 
-g = graph(title = 'Kinetic Energy vs. Time', xtitle = 'Time (s)', ytitle = 'Kinetic Energy (J)', ymin = 0)
+g = graph(title = 'Kinetic Energy of System vs. Time', xtitle = 'Time (s)', ytitle = 'Kinetic Energy (J)', ymin = 0)
 gc = gcurve(graph = g)
 
 
@@ -237,6 +237,7 @@ def enableWidgets():
 
 def setup():
     global dt, f, running, s, b, totalAngularMomentum, ccwBug
+    ccwBug = False
     rate(f)
     dt = 1/f
     running = True
