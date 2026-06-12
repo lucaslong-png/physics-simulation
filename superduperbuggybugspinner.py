@@ -208,9 +208,9 @@ def reset():
 
 resetButton = button(bind = reset, text = 'reset', pos = scene.title_anchor)
 
-finalAngVel = wtext(text = 'disk angular velocity: ' + 0 + 'rad/s')
+finalAngVel = wtext(text = 'disk angular velocity: ' + 0 + ' rad/s')
 scene.append_to_caption('\n')
-finalAngMomentum = wtext(text = 'total angular momentum: ' + totalAngularMomentum + 'kg m²/s')
+finalAngMomentum = wtext(text = 'total angular momentum: ' + totalAngularMomentum + ' kg m²/s')
 
 def disableWidgets():
     mass1Slider.disabled = True
@@ -267,8 +267,8 @@ def tick():
             b.avel -= b.decel * dt
             s.w += ((b.decel * b.calcInertia()) / (s.calcInertia() + b.calcInertia())) * dt
     totalAngularMomentum = b.calcAngularMomentum(s) + s.calcAngularMomentum()
-    finalAngVel.text = 'disk angular velocity: ' + str(s.w) + 'rad/s'
-    finalAngMomentum.text = 'angular momentum: ' + str(totalAngularMomentum) + 'kg m²/s'
+    finalAngVel.text = 'disk angular velocity: ' + str(s.w) + ' rad/s'
+    finalAngMomentum.text = 'angular momentum: ' + str(totalAngularMomentum) + ' kg m²/s'
     gc.plot(t, b.calcEnergy(s) + s.calcEnergy())
     t += dt
 
