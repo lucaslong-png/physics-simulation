@@ -9,7 +9,7 @@ postSimulation = False
 scene.userzoom = False
 scene.userspin = False
 scene.userpan = False
-scene.ambient = color.white*0.8
+scene.ambient = color.white*0.3
 
 
 class lazy_susan:
@@ -43,7 +43,7 @@ class bug:
         self.decel = deceleration
         self.dist = distance
         self.ang = angle #from positive x axis
-        self.ladybug = cylinder(pos = vec(self.dist * cos(angle), self.dist * sin(angle), 0), axis = vec(0, 0, 1), radius = 0.011, length = 0.001, color = vec(0.6,0,0))
+        self.ladybug = cylinder(pos = vec(self.dist * cos(angle), self.dist * sin(angle), 1), axis = vec(0, 0, 1), radius = 0.011, length = 0.001, color = vec(0.6,0,0))
 
 
     def calcInertia(self):
@@ -62,21 +62,21 @@ class bug:
             self.ang -= 2 * pi
         while (self.ang < 0):
             self.ang += 2 * pi
-        self.ladybug.pos = vec(self.dist * cos(self.ang), self.dist * sin(self.ang), 0)
+        self.ladybug.pos = vec(self.dist * cos(self.ang), self.dist * sin(self.ang), 1)
         inshape.pos = self.ladybug.pos
 
 
 
     def updateCylinder(self):
         global inshape
-        self.ladybug.pos = vec(self.dist * cos(self.ang), self.dist * sin(self.ang), 0)
+        self.ladybug.pos = vec(self.dist * cos(self.ang), self.dist * sin(self.ang), 1)
         inshape.pos = self.ladybug.pos
 
 s = lazy_susan(0.15, 0.44, -2.8)
 b = bug(0.17, 16.1, 0, 0.15, 0)
 inshape = cylinder(pos = b.ladybug.pos, axis = vec(0, 0, 1), radius = 0.0098, length = 0.001, color = color.red)
 scene.autoscale = False
-bground = box(pos = vec(0,0,2), texture = textures.wood, size = vec(7.4,5,1))
+bground = box(pos = vec(0,0,-2), texture = textures.wood, size = vec(9.4,6,1))
 
 directionLabel = label(pos = vector(0, scene.range-0.1, 1), text = 'Note: positive angular velocity values are considered to be in the counterclockwise direction', color = vec(255, 0, 0))
 #need to fix
@@ -290,7 +290,7 @@ def tick():
 scene.camera.follow(s.disk)
 while True:
     rate(f)
-    scene.camera.axis = vec(0,0,s.disk.radius * 2.5)
+    scene.camera.axis = vec(0,0,-1-s.disk.radius * 2.5)
     directionLabel.pos = vector(0, scene.range*0.9, 0)
     if (running):
         tick()
