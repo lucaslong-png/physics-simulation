@@ -43,7 +43,7 @@ class bug:
         self.decel = deceleration
         self.dist = distance
         self.ang = angle #from positive x axis
-        self.ladybug = cylinder(pos = vec(self.dist * cos(angle), self.dist * sin(angle), 1), axis = vec(0, 0, 1), radius = 0.011, length = 0.001, color = vec(0.6,0,0))
+        self.ladybug = cylinder(pos = vec(self.dist * cos(angle), self.dist * sin(angle), 1), axis = vec(0, 0, 1), radius = 0.015, length = 0.001, color = vec(0.6,0,0))
 
 
     def calcInertia(self):
@@ -74,7 +74,7 @@ class bug:
 
 s = lazy_susan(0.15, 0.44, -2.8)
 b = bug(0.17, 16.1, 0, 0.15, 0)
-inshape = cylinder(pos = b.ladybug.pos, axis = vec(0, 0, 1), radius = 0.0098, length = 0.001, color = color.red)
+inshape = cylinder(pos = b.ladybug.pos, axis = vec(0, 0, 1), radius = 0.014, length = 0.001, color = color.red)
 scene.autoscale = False
 bground = box(pos = vec(0,0,-2), texture = textures.wood, size = vec(9.4,6,1))
 
@@ -215,7 +215,7 @@ def reset():
     inshape.visible = False
     s = lazy_susan(radius1Slider.value, mass1Slider.value, angVel1Slider.value)
     b = bug(mass2Slider.value, angVel2Slider.value, deceleration_slider.value, radial_distance_slider.value / 100 * radius1Slider.value, initial_angle_slider.value)
-    inshape = cylinder(pos = b.ladybug.pos, axis = vec(0, 0, 1), radius = 0.0098, length = 0.001, color = color.red)
+    inshape = cylinder(pos = b.ladybug.pos, axis = vec(0, 0, 1), radius = 0.014, length = 0.001, color = color.red)
     enableWidgets()
 
 resetButton = button(bind = reset, text = 'reset', pos = scene.title_anchor)
